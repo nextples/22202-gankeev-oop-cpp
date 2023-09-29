@@ -1,8 +1,28 @@
-//
-// Created by User on 25.09.2023.
-//
-
 #ifndef CPP_LABS_FILEREADER_H
 #define CPP_LABS_FILEREADER_H
+
+#include <string>
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+class FileReader {
+private:
+    string path;
+    ifstream file;
+
+public:
+    FileReader(string path);
+
+    void open();
+
+    bool hasNext();
+
+    string next();
+
+    void close();
+
+};
 
 #endif //CPP_LABS_FILEREADER_H
