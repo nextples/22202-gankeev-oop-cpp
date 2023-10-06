@@ -17,6 +17,7 @@ int main() {
         parser.toLowerConverte();
         parser.createTokens();
     }
+
     StatisticStorage::sortData(parser);
     CSVFileWriter fileWriter("C:\\Users\\User\\CLionProjects\\22202-Gankeev-OOP-CPP\\task-0\\output.csv");
     fileWriter.open();

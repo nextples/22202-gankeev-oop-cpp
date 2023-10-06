@@ -20,7 +20,7 @@ int StatisticStorage::countSum(Parser &parser) {
     return sum;
 }
 
-double StatisticStorage::countProcent(int value, Parser &parser) {
+double StatisticStorage::countProcent(int numb, Parser &parser) {
     StatisticStorage statistic;
-    return (double)value / (double) statistic.countSum(parser)  * 100;
+    return (double)numb / (double) statistic.countSum(parser) * 100;
 }

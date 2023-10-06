@@ -37,7 +37,7 @@ void Parser::addToken(string lex) {
 
 void Parser::createTokens() {
     string lexeme = "";
-    for (int i = 0; i < str.length(); i++) {
+    for (int i = 0; i < str.length() + 1; i++) {
         if ((str[i] >= '0' && str[i] <= '9') || (str[i] >= 'A' &&
             str[i] <= 'Z') || (str[i] >= 'a' && str[i] <= 'z')) {
             lexeme += str[i];

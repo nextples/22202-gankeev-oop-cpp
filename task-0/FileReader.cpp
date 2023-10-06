@@ -20,7 +20,6 @@ string FileReader::next() {
     if (!file.eof()) {
         str = "";
         getline(file, str);
-        str += '\n';
         return str;
     }
     return str;

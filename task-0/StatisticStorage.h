@@ -16,7 +16,7 @@ public:
 
     static void sortData(Parser &parser);
 
-    static double countProcent(int value, Parser &parser);
+    static double countProcent(int numb, Parser &parser);
 };
 
 
