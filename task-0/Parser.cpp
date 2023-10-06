@@ -50,3 +50,11 @@ void Parser::createTokens() {
         }
     }
 }
+
+token_t Parser::getToken(int ind) {
+    return vect[ind];
+}
+
+vector<token_t>* Parser::getVector() {
+    return &vect;
+}

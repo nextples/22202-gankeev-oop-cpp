@@ -13,3 +13,5 @@ add_executable(cpp_labs task-0/main.cpp
         task-0/CSVFileWriter.cpp
         task-0/CSVFileWriter.h
 )
+
+#add_subdirectory(task-0/Google_test)

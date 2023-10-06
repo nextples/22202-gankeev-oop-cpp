@@ -6,8 +6,6 @@
 #include <string>
 #include <vector>
 
-
-
 using namespace std;
 
 struct token_t {
@@ -15,19 +13,11 @@ struct token_t {
     int numb;
 };
 
-class StatisticStorage;
-class CSVFileWriter;
-
 class Parser {
-
-    friend StatisticStorage;
-    friend CSVFileWriter;
-
 private:
     string str;
     vector<token_t> vect;
     void addToken(string lex);
-    //    friend void StatisticStorage::sortData(Parser &parser);
 public:
     Parser();
 
@@ -39,6 +29,9 @@ public:
 
     void createTokens();
 
+    vector<token_t>* getVector();
+
+    token_t getToken(int ind);
 };
 
 

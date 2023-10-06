@@ -15,8 +15,8 @@ void CSVFileWriter::open() {
 
 void CSVFileWriter::writeData(Parser &parser) {
 
-    for (int i = 0; i < parser.vect.size(); i++) {
-        fileCSV << parser.vect[i].lexeme << ',' << parser.vect[i].numb << ',' << StatisticStorage::countProcent(parser.vect[i].numb, parser) << '%' << endl;
+    for (int i = 0; i < parser.getVector()->size(); i++) {
+        fileCSV << parser.getToken(i).lexeme << ',' << parser.getToken(i).numb << ',' << StatisticStorage::countProcent(parser.getToken(i).numb, parser) << '%' << endl;
     }
 }
 

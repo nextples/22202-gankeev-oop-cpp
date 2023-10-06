@@ -9,13 +9,13 @@ bool StatisticStorage::compare(const token_t &a, const token_t &b) {
 }
 
 void StatisticStorage::sortData(Parser &parser) {
-    sort(parser.vect.begin(), parser.vect.end(), compare);
+    sort(parser.getVector()->begin(), parser.getVector()->end(), compare);
 }
 
 int StatisticStorage::countSum(Parser &parser) {
     sum = 0;
-    for (int i = 0; i < parser.vect.size(); i++) {
-        sum += parser.vect[i].numb;
+    for (int i = 0; i < parser.getVector()->size(); i++) {
+        sum += parser.getToken(i).numb;
     }
     return sum;
 }
