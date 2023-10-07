@@ -10,7 +10,7 @@ CSVFileWriter::CSVFileWriter(string path) {
 }
 
 void CSVFileWriter::open() {
-    fileCSV.open(path, fstream::in | fstream::out);
+    fileCSV.open(path, fstream::in | fstream::out | fstream::trunc);
 }
 
 void CSVFileWriter::writeData(Parser &parser) {
