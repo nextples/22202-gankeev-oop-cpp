@@ -1,6 +1,8 @@
 #ifndef CPP_LABS_PARSER_H
 #define CPP_LABS_PARSER_H
 
+#define SENS_CASE 0
+#define INSENS_CASE 1
 
 #include <iostream>
 #include <string>
@@ -13,25 +15,31 @@ struct token_t {
     int numb;
 };
 
+
+void toLowerConverte(string str);
+
+
 class Parser {
 private:
+    bool mode;
     string str;
-    vector<token_t> vect;
-    void addToken(string lex);
+
+    //vector<token_t> vect;
+
+    vector<string> vect;
+
+    //void addToken(string lex);
+
 public:
-    Parser();
+    Parser(bool mode = SENS_CASE);
 
-    void setVector();
+    Parser(string str, bool mode = SENS_CASE);
 
-    void setStr(string str);
+    vector<string> & parse();
 
-    void toLowerConverte();
-
-    void createTokens();
-
-    vector<token_t>* getVector();
-
-    token_t getToken(int ind);
+//    vector<token_t>* getVector();
+//
+//    token_t getToken(int ind);
 };
 
 
