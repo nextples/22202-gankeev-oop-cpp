@@ -69,6 +69,21 @@ BitArray & BitArray::operator = (const BitArray &other) {
     return *this;
 }
 
-void BitArray::resize(int num_bits, bool value) {
+void BitArray::resize(int num_bits, bool value) {   //Изменяет размер массива. В случае расширения, новые элементы инициализируются значением value.
+    bitSize = num_bits;
+    int newElSize = 0;
+    if (num_bits % sizeof(unsigned long) == 0) {
+        newElSize = (int)(num_bits / sizeof(unsigned long));
+    }
+    else {
+        newElSize = (int)(num_bits / sizeof(unsigned long) + 1);
+    }
+    unsigned long *newArray = new unsigned long [newElSize];
+    if (newElSize <= )
+    for (int i = 0; i < newElSize; i++) {
+        newArray[i] = array[i];
+    }
+
+
 
 }
