@@ -10,11 +10,6 @@
 
 using namespace std;
 
-struct token_t {
-    string lexeme;
-    int numb;
-};
-
 
 void toLowerConverte(string str);
 

@@ -13,7 +13,7 @@ TEST(StatisticStorage, CountTokens){
     ASSERT_EQ(parser.getToken(0).numb, 2);
     ASSERT_EQ(parser.getToken(1).numb, 2);
     ASSERT_EQ(parser.getToken(2).numb, 1);
-    ASSERT_EQ(StatisticStorage::countProcent(parser.getToken(0).numb, parser), 40);
-    ASSERT_EQ(StatisticStorage::countProcent(parser.getToken(1).numb, parser), 40);
-    ASSERT_EQ(StatisticStorage::countProcent(parser.getToken(2).numb, parser), 20);
+    ASSERT_EQ(StatisticStorage::countFreqProcent(parser.getToken(0).numb, parser), 40);
+    ASSERT_EQ(StatisticStorage::countFreqProcent(parser.getToken(1).numb, parser), 40);
+    ASSERT_EQ(StatisticStorage::countFreqProcent(parser.getToken(2).numb, parser), 20);
 }

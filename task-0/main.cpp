@@ -1,8 +1,8 @@
 #include <iostream>
 #include "FileReader.h"
 #include "Parser.h"
-//#include "StatisticStorage.h"
-//#include "CSVFileWriter.h"
+#include "StatisticStorage.h"
+#include "CSVFileWriter.h"
 
 using namespace std;
 
@@ -18,7 +18,7 @@ int main() {
         lexemes.insert(lexemes.end(), parsedStr.begin(), parsedStr.end());
     }
 
-
+    StatisticStorage
 //    StatisticStorage::sortData(parser);
 //    CSVFileWriter fileWriter("C:\\Users\\User\\CLionProjects\\22202-Gankeev-OOP-CPP\\task-0\\output.csv");
 //    fileWriter.open();
