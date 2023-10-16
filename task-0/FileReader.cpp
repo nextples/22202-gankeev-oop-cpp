@@ -6,8 +6,12 @@ FileReader::FileReader(string path) {
     this->path = path;
 }
 
-void FileReader::open() {
+bool FileReader::open() {
     file.open(path);
+    if (file.is_open()){
+        return true;
+    }
+    return false;
 }
 
 bool FileReader::hasNext() {

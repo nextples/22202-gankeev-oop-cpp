@@ -1,8 +1,8 @@
 #ifndef CPP_LABS_PARSER_H
 #define CPP_LABS_PARSER_H
 
-#define SENS_CASE 0
-#define INSENS_CASE 1
+#define SENS_CASE 1
+#define INSENS_CASE 0
 
 #include <iostream>
 #include <string>
@@ -11,7 +11,7 @@
 using namespace std;
 
 
-void toLowerConverte(string str);
+string toLowerConverte(string str);
 
 
 class Parser {

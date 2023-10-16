@@ -1,2 +1,1 @@
-Hello world!
- Hi Hello!
+Hello, it is test message! Lets parse it!

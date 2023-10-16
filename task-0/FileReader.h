@@ -15,7 +15,7 @@ private:
 public:
     FileReader(string path);
 
-    void open();
+    bool open();
 
     bool hasNext();
 

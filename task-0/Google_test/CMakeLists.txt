@@ -7,15 +7,15 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 # 'Google_Tests_run' is the target name
 # 'test1.cpp test2.cpp' are source files with tests
-add_executable(Google_Tests_run ParseStringTest.cpp
-        ../CSVFileWriter.cpp
-        ../Parser.cpp
-        ../FileReader.cpp
-        ../CSVFileWriter.cpp
-        ../StatisticStorage.cpp
+add_executable(GTest_Parse ParseStringTest.cpp
+        ../Parser.cpp)
 
-        StatisticStorageTest.cpp)
+add_executable(GTest_StatisticStorage StatisticStorageTest.cpp
+        ../StatisticStorage.cpp)
 
+add_executable(GTest_FileReader FileReaderTest.cpp
+        ../FileReader.cpp)
 
-
-target_link_libraries(Google_Tests_run gtest gtest_main)
+target_link_libraries(GTest_Parse gtest gtest_main)
+target_link_libraries(GTest_StatisticStorage gtest gtest_main)
+target_link_libraries(GTest_FileReader gtest gtest_main)

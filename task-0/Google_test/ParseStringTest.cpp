@@ -1,54 +1,68 @@
 #include "gtest/gtest.h"
 #include "../Parser.h"
-#include "string"
+#include <string>
+#include <vector>
+
+using namespace std;
 
 TEST(ParseString, SplitByWords1) {
-    Parser parser;
-    string str = "abc abcd a1b2c3";
-    parser.setVector();
-    parser.setStr(str);
-    parser.toLowerConverte();
-    parser.parseString();
+    string str = "Hello, it is test message! Lets parse it!";
 
-    ASSERT_EQ(parser.getVector()->size(), 3);
-    ASSERT_EQ(parser.getToken(0).lexeme, "abc");
-    ASSERT_EQ(parser.getToken(1).lexeme, "abcd");
-    ASSERT_EQ(parser.getToken(2).lexeme, "a1b2c3");
+    Parser parser(str, INSENS_CASE);
+    vector<string> parsedStr = parser.parseString();
+
+    ASSERT_EQ(parsedStr.size(), 8);
+    ASSERT_EQ(parsedStr[0], "hello");
+    ASSERT_EQ(parsedStr[1], "it");
+    ASSERT_EQ(parsedStr[2], "is");
+    ASSERT_EQ(parsedStr[3], "test");
+    ASSERT_EQ(parsedStr[4], "message");
+    ASSERT_EQ(parsedStr[5], "lets");
+    ASSERT_EQ(parsedStr[6], "parse");
+    ASSERT_EQ(parsedStr[7], "it");
 }
 
 TEST(ParseString, SplitByWords2) {
-    Parser parser;
-    string str = "123 + abcd  \n  \t dcba+12";
-    parser.setVector();
-    parser.setStr(str);
-    parser.toLowerConverte();
-    parser.parseString();
+    string str = "Hello! It is test message! Lets parse it!";
 
-    ASSERT_EQ(parser.getVector()->size(), 4);
-    ASSERT_EQ(parser.getToken(0).lexeme, "123");
-    ASSERT_EQ(parser.getToken(1).lexeme, "abcd");
-    ASSERT_EQ(parser.getToken(2).lexeme, "dcba");
-    ASSERT_EQ(parser.getToken(3).lexeme, "12");
+    Parser parser(str, SENS_CASE);
+    vector<string> parsedStr = parser.parseString();
+
+    ASSERT_EQ(parsedStr.size(), 8);
+    ASSERT_EQ(parsedStr[0], "Hello");
+    ASSERT_EQ(parsedStr[1], "It");
+    ASSERT_EQ(parsedStr[2], "is");
+    ASSERT_EQ(parsedStr[3], "test");
+    ASSERT_EQ(parsedStr[4], "message");
+    ASSERT_EQ(parsedStr[5], "Lets");
+    ASSERT_EQ(parsedStr[6], "parse");
+    ASSERT_EQ(parsedStr[7], "it");
+}
+
+TEST(ParseString, SplitByNumbers) {
+    string str = "64 128 5,12";
+    Parser parser(str, INSENS_CASE);
+    vector<string> parsedStr = parser.parseString();
+
+    ASSERT_EQ(parsedStr.size(), 4);
+    ASSERT_EQ(parsedStr[0], "64");
+    ASSERT_EQ(parsedStr[1], "128");
+    ASSERT_EQ(parsedStr[2], "5");
+    ASSERT_EQ(parsedStr[3], "12");
 }
 
 TEST(ParseString, EmptyString) {
-    Parser parser;
     string str = "";
-    parser.setVector();
-    parser.setStr(str);
-    parser.toLowerConverte();
-    parser.parseString();
+    Parser parser(str, INSENS_CASE);
+    vector<string> parsedStr = parser.parseString();
 
-    ASSERT_EQ(parser.getVector()->size(), 0);
+    ASSERT_EQ(parsedStr.size(), 0);
 }
 
 TEST(ParseString, StringWithNoWords) {
-    Parser parser;
-    string str = "\n \t    \n \t";
-    parser.setVector();
-    parser.setStr(str);
-    parser.toLowerConverte();
-    parser.parseString();
+    string str = "+++\n    \t%%%";
+    Parser parser(str, INSENS_CASE);
+    vector<string> parsedStr = parser.parseString();
 
-    ASSERT_EQ(parser.getVector()->size(), 0);
+    ASSERT_EQ(parsedStr.size(), 0);
 }

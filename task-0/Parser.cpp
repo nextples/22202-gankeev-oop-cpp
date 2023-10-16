@@ -4,12 +4,13 @@
 
 using namespace std;
 
-void toLowerConverte(string str) {
+string toLowerConverte(string str) {
     for (int i = 0; i < str.size(); i++) {
         if (str[i] >= 'A' && str[i] <= 'Z') {
             str[i] = str[i] + ('a' - 'A');
         }
     }
+    return str;
 }
 
 Parser::Parser(bool mode) {
@@ -25,8 +26,8 @@ Parser::Parser(string str, bool mode) {
 }
 
 vector<string> & Parser::parseString() {
-    if (mode = INSENS_CASE) {
-        toLowerConverte(str);
+    if (mode == INSENS_CASE) {
+        str = toLowerConverte(str);
     }
 
     string lexeme = "";
