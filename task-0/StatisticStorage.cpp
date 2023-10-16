@@ -19,8 +19,8 @@ void StatisticStorage::createTokens() {
     for (int i = 0; i < lexemes.size(); i++) {
         bool isAdded = false;
         for (int j = 0; j < tokens.size(); j++) {
-            if (lexemes[i] == tokens[i].lexeme) {
-                tokens[i].numb++;
+            if (lexemes[i] == tokens[j].lexeme) {
+                tokens[j].numb++;
                 isAdded = true;
                 break;
             }
@@ -49,20 +49,13 @@ void StatisticStorage::countFreqProcent() {
     }
 }
 
-
-
-
-//int StatisticStorage::countSum(Parser &parser) {
-//    sum = 0;
-//    for (int i = 0; i < parser.getVector()->size(); i++) {
-//        sum += parser.getToken(i).numb;
-//    }
-//    return sum;
-//}
-
-double StatisticStorage::countFreqProcent(int numb, Parser &parser) {
-    StatisticStorage statistic;
-    return (double)numb / (double) statistic.countSum(parser) * 100;
+vector<token_t> & StatisticStorage::getFrequency() {
+    createTokens();
+    sortData();
+    countFreqProcent();
+    return tokens;
 }
+
+
 
 

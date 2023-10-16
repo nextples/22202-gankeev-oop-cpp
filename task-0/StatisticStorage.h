@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 
+using namespace std;
+
 struct token_t {
     string lexeme;
     int numb;
@@ -30,7 +32,7 @@ public:
 
     void countFreqProcent();
 
-    void getFrequency();
+    vector<token_t> & getFrequency();
 };
 
 

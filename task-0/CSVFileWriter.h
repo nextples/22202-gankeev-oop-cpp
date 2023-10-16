@@ -4,7 +4,8 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include "Parser.h"
+
+#define END_OF_LINE true
 
 using namespace std;
 
@@ -18,9 +19,12 @@ public:
 
     void open();
 
-    void writeData(Parser &parser);
 
     void close();
+
+    void writeData(string str, bool isEOL = false);
+    void writeData(int numb, bool isEOL = false);
+    void writeData(double dnumb, bool isEOL = false);
 };
 
 #endif //CPP_LABS_CSVFILEWRITER_H
