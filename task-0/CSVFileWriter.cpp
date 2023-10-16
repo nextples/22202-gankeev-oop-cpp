@@ -28,15 +28,6 @@ void CSVFileWriter::writeData(int numb, bool isEOL) {
     }
 }
 
-//void CSVFileWriter::writeData(double dnumb, bool isEOL) {
-//    if (!isEOL) {
-//        fileCSV << dnumb << ',';
-//    }
-//    else {
-//        fileCSV << dnumb << endl;
-//    }
-//}
-
 void CSVFileWriter::close() {
     fileCSV.close();
 }

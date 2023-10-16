@@ -8,7 +8,7 @@ TEST(ParseString, SplitByWords1) {
     parser.setVector();
     parser.setStr(str);
     parser.toLowerConverte();
-    parser.parse();
+    parser.parseString();
 
     ASSERT_EQ(parser.getVector()->size(), 3);
     ASSERT_EQ(parser.getToken(0).lexeme, "abc");
@@ -22,7 +22,7 @@ TEST(ParseString, SplitByWords2) {
     parser.setVector();
     parser.setStr(str);
     parser.toLowerConverte();
-    parser.parse();
+    parser.parseString();
 
     ASSERT_EQ(parser.getVector()->size(), 4);
     ASSERT_EQ(parser.getToken(0).lexeme, "123");
@@ -37,7 +37,7 @@ TEST(ParseString, EmptyString) {
     parser.setVector();
     parser.setStr(str);
     parser.toLowerConverte();
-    parser.parse();
+    parser.parseString();
 
     ASSERT_EQ(parser.getVector()->size(), 0);
 }
@@ -48,7 +48,7 @@ TEST(ParseString, StringWithNoWords) {
     parser.setVector();
     parser.setStr(str);
     parser.toLowerConverte();
-    parser.parse();
+    parser.parseString();
 
     ASSERT_EQ(parser.getVector()->size(), 0);
 }

@@ -1,1 +1,2 @@
-this is text message
+Hello world!
+ Hi Hello!

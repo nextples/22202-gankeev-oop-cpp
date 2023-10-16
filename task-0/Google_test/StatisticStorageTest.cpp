@@ -8,7 +8,7 @@ TEST(StatisticStorage, CountTokens){
     parser.setVector();
     parser.setStr(str);
     parser.toLowerConverte();
-    parser.parse();
+    parser.parseString();
 
     ASSERT_EQ(parser.getToken(0).numb, 2);
     ASSERT_EQ(parser.getToken(1).numb, 2);

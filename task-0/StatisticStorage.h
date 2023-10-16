@@ -21,16 +21,14 @@ private:
 
     static bool compare(const token_t &a, const token_t &b);
 
-public:
-    StatisticStorage(vector<std::string> & lexemes);
-
     void createTokens();
-
-//    int countSum(Parser &parser);
 
     void sortData();
 
     void countFreqProcent();
+
+public:
+    StatisticStorage(vector<std::string> & lexemes);
 
     vector<token_t> & getFrequency();
 };

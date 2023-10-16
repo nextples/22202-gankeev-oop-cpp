@@ -19,22 +19,15 @@ private:
     bool mode;
     string str;
 
-    //vector<token_t> vect;
-
     vector<string> vect;
-
-    //void addToken(string lex);
 
 public:
     Parser(bool mode = SENS_CASE);
 
     Parser(string str, bool mode = SENS_CASE);
 
-    vector<string> & parse();
+    vector<string> & parseString();
 
-//    vector<token_t>* getVector();
-//
-//    token_t getToken(int ind);
 };
 
 

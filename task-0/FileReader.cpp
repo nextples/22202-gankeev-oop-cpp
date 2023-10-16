@@ -1,6 +1,5 @@
 #include "FileReader.h"
 
-#include <iostream>
 #include <string>
 
 FileReader::FileReader(string path) {
@@ -15,7 +14,7 @@ bool FileReader::hasNext() {
     return !file.eof();
 }
 
-string FileReader::next() {
+string FileReader::nextString() {
     string str = "";
     if (!file.eof()) {
         str = "";

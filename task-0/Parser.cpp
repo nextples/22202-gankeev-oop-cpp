@@ -4,6 +4,14 @@
 
 using namespace std;
 
+void toLowerConverte(string str) {
+    for (int i = 0; i < str.size(); i++) {
+        if (str[i] >= 'A' && str[i] <= 'Z') {
+            str[i] = str[i] + ('a' - 'A');
+        }
+    }
+}
+
 Parser::Parser(bool mode) {
     str = "";
     vect = {};
@@ -16,26 +24,7 @@ Parser::Parser(string str, bool mode) {
     this->mode = mode;
 }
 
-void toLowerConverte(string str) {
-    for (int i = 0; i < str.size(); i++) {
-        if (str[i] >= 'A' && str[i] <= 'Z') {
-            str[i] = str[i] + ('a' - 'A');
-        }
-    }
-}
-
-//void Parser::addToken(string lex) {
-//    for (int i = 0; i < vect.size(); i++) {
-//        if (vect[i].lexeme == lex) {
-//            vect[i].numb++;
-//            return;
-//        }
-//    }
-//    token_t token = {lex, 1};
-//    vect.push_back(token);
-//}
-
-vector<string> & Parser::parse() {
+vector<string> & Parser::parseString() {
     if (mode = INSENS_CASE) {
         toLowerConverte(str);
     }
@@ -48,7 +37,6 @@ vector<string> & Parser::parse() {
         }
         else {
             if (!lexeme.empty()) {
-                //addToken(lexeme);
                 vect.push_back(lexeme);
             }
             lexeme = "";
@@ -56,11 +44,3 @@ vector<string> & Parser::parse() {
     }
     return vect;
 }
-
-//token_t Parser::getToken(int ind) {
-//    return vect[ind];
-//}
-//
-//vector<token_t>* Parser::getVector() {
-//    return &vect;
-//}

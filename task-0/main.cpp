@@ -1,4 +1,3 @@
-#include <iostream>
 #include "FileReader.h"
 #include "Parser.h"
 #include "StatisticStorage.h"
@@ -7,22 +6,24 @@
 #include <vector>
 using namespace std;
 
-int main() {
-    FileReader fileReader("C:\\Users\\User\\CLionProjects\\22202-Gankeev-OOP-CPP\\task-0\\text.txt");
+int main(int argc, char* argv[]) { // required full path to input and output file
+    string inputFilePath = argv[1];
+    string outputFilePath = argv[2];
+    FileReader fileReader(inputFilePath);
     fileReader.open();
 
     vector<string> lexemes = {};
     while (fileReader.hasNext()) {
-        string str = fileReader.next();
+        string str = fileReader.nextString();
         Parser parser(str, INSENS_CASE);
-        vector<string> parsedStr = parser.parse();
+        vector<string> parsedStr = parser.parseString();
         lexemes.insert(lexemes.end(), parsedStr.begin(), parsedStr.end());
     }
 
     StatisticStorage statistic(lexemes);
     vector<token_t> freqList = statistic.getFrequency();
 
-    CSVFileWriter fileWriter("C:\\Users\\User\\CLionProjects\\22202-Gankeev-OOP-CPP\\task-0\\output.csv");
+    CSVFileWriter fileWriter(outputFilePath);
     fileWriter.open();
     for (int i = 0; i < freqList.size(); i++) {
         fileWriter.writeData(freqList[i].lexeme);

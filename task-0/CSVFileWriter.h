@@ -18,13 +18,10 @@ public:
     CSVFileWriter(string path);
 
     void open();
-
-
     void close();
 
     void writeData(string str, bool isEOL = false);
     void writeData(int numb, bool isEOL = false);
-    void writeData(double dnumb, bool isEOL = false);
 };
 
 #endif //CPP_LABS_CSVFILEWRITER_H

@@ -19,7 +19,7 @@ public:
 
     bool hasNext();
 
-    string next();
+    string nextString();
 
     void close();
 
