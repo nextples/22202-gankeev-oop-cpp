@@ -1,7 +1,8 @@
 #include "BitArray.h"
 #include <limits.h>
+#include <iostream>
 
-#define BITS_IN_LONG sizeof(unsigned long)*8
+#define BITS_IN_LONG (sizeof(unsigned long) * 8)
 
 unsigned long CheckBit(const int value, const int position) {
     unsigned long result;
@@ -149,5 +150,45 @@ void BitArray::push_back(bool bit) {
             bitSize++;
         }
     }
+}
+
+BitArray &BitArray::operator&=(const BitArray &b) {
+    if (bitSize != b.bitSize) {
+        cout << "Error: different sizes of arrays! Operation is cancelled" << endl; // ÎÁÐÀÁÎÒÀÒÜ ÎØÈÁÊÓ!!!
+    }
+    else {
+        for (int i = 0; i < elSize; i++) {
+            array[i] = array[i] & b.array[i];
+        }
+    }
+    return (BitArray &) *this;
+}
+
+BitArray &BitArray::operator|=(const BitArray &b) {
+    if (bitSize != b.bitSize) {
+        cout << "Error: different sizes of arrays! Operation is cancelled" << endl; // ÎÁÐÀÁÎÒÀÒÜ ÎØÈÁÊÓ!!!
+    }
+    else {
+        for (int i = 0; i < elSize; i++) {
+            array[i] = array[i] | b.array[i];
+        }
+    }
+    return (BitArray &) *this;
+}
+
+BitArray &BitArray::operator^=(const BitArray &b) {
+    if (bitSize != b.bitSize) {
+        cout << "Error: different sizes of arrays! Operation is cancelled" << endl; // ÎÁÐÀÁÎÒÀÒÜ ÎØÈÁÊÓ!!!
+    }
+    else {
+        for (int i = 0; i < elSize; i++) {
+            array[i] = array[i] ^ b.array[i];
+        }
+    }
+    return (BitArray &) *this;
+}
+
+BitArray &BitArray::operator<<=(int n) {
+
 }
 
