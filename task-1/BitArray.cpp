@@ -4,9 +4,9 @@
 
 #define BITS_IN_LONG (sizeof(unsigned long) * 8)
 
-unsigned long CheckBit(const int value, const int position) {
+unsigned long CheckBit(const unsigned long value, const int pos) {
     unsigned long result;
-    if ((value & (1 << position)) == 0) {
+    if ((value & (1 << pos)) == 0) {
         result = 0;
     }
     else {
@@ -15,13 +15,24 @@ unsigned long CheckBit(const int value, const int position) {
     return result;
 }
 
-unsigned long SetZeroToBit(unsigned long value, int position) {
-    return (value & ~(1 << position));
+unsigned long SetBit(bool bit, unsigned long value, int pos) {
+    if (bit == 1) {
+        value =  (value | (1 << pos));
+        return value;
+    }
+    if (bit == 0) {
+        value = (value & ~(1 << pos));
+        return value;
+    }
 }
 
-unsigned long SetOneToBit(unsigned long value, int position) {
-    return (value | (1 << position));
-}
+//unsigned long SetZeroToBit(unsigned long value, int position) {
+//    return (value & ~(1 << position));
+//}
+//
+//unsigned long SetOneToBit(unsigned long value, int position) {
+//    return (value | (1 << position));
+//}
 
 BitArray::BitArray() {      // create array constructor
     array = nullptr;
@@ -44,24 +55,22 @@ BitArray::BitArray(const BitArray &other) {     // copy constructor
 }
 
 BitArray::BitArray(int num_bits, unsigned long value) {     // constructor with start value
-    array = new unsigned long [num_bits];
-    array[0] = value;
-    bitSize = num_bits;
-    elSize = 1;
-}
-
-BitArray::BitArray(int num_bits) {      // constructor without start value
-    array = new unsigned long [num_bits];
     bitSize = num_bits;
     if (num_bits % sizeof(unsigned long) == 0) {
-        elSize = (int)(num_bits / sizeof(unsigned long));
+        elSize = (int)(num_bits / BITS_IN_LONG);
     }
     else {
-        elSize = (int)(num_bits / sizeof(unsigned long) + 1);
+        elSize = (int)(num_bits / BITS_IN_LONG + 1);
     }
+    array = new unsigned long [elSize];
+    array[0] = value;
 }
 
-void BitArray::swap(BitArray &a, BitArray &b) {
+int BitArray::size() {
+    return bitSize;
+}
+
+void BitArray::swap(BitArray &b) {
     // почему нельзя просто поменять указатели на эти объекты?? в чем смысл? почему в аргументах функции изначально один объект??
 }
 
@@ -79,45 +88,32 @@ BitArray & BitArray::operator = (const BitArray &other) {
     return *this;
 }
 
-void BitArray::resize(int num_bits, bool value) {   //Изменяет размер массива. В случае расширения, новые элементы инициализируются значением value.
+void BitArray::resize(int newBitSize, bool value) {   //Изменяет размер массива. В случае расширения, новые элементы инициализируются значением value.
     int newElSize = 0;
-    if (num_bits % sizeof(unsigned long) == 0) {
-        newElSize = (int)(num_bits / sizeof(unsigned long));
+    if (newBitSize % BITS_IN_LONG == 0) {
+        newElSize = (int) (newBitSize / BITS_IN_LONG);
+    } else {
+        newElSize = (int) (newBitSize / BITS_IN_LONG + 1);
     }
-    else {
-        newElSize = (int)(num_bits / sizeof(unsigned long) + 1);
-    }
-    unsigned long *newArray = new unsigned long [newElSize];
-    if (newElSize <= elSize) {
-        for (int i = 0; i < newElSize; i++) {
-            newArray[i] = array[i];
+    unsigned long *newArray = new unsigned long[newElSize];
+
+    if (newBitSize > bitSize) {
+        for (int i = 0; i < bitSize; i++) {
+            newArray[i / BITS_IN_LONG] = array[i / BITS_IN_LONG];
         }
-    }
-    else {
-        for (int i = 0; i < elSize; i++) { //   copy the previous version
-            newArray[i] = array[i];
+        for (int i = bitSize; i < newBitSize; i++) {
+            int pos = BITS_IN_LONG - (int) (i % BITS_IN_LONG);
+            newArray[i / BITS_IN_LONG] = SetBit(value, newArray[i / BITS_IN_LONG], pos);
         }
-        for (int i = BITS_IN_LONG - (bitSize % BITS_IN_LONG) - 1; i >= 0; i--) {
-            if (value) {
-                newArray[elSize - 1] = SetOneToBit(newArray[elSize - 1], i);
-            }
-            else {
-                newArray[elSize - 1] = SetZeroToBit(newArray[elSize - 1], i);
-            }
-        }
-        for (int i = elSize; i < newElSize; i++) {
-            if (value) {
-                newArray[i] = LONG_MAX;
-            }
-            else {
-                newArray[i] = 0;
-            }
+    } else {
+        for (int i = 0; i < newBitSize; i++) {
+            newArray[i / BITS_IN_LONG] = array[i / BITS_IN_LONG];
         }
     }
     delete[] array;
     array = newArray;
     elSize = newElSize;
-    bitSize = num_bits;
+    bitSize = newBitSize;
 }
 
 void BitArray::clear() {
@@ -127,28 +123,15 @@ void BitArray::clear() {
 }
 
 void BitArray::push_back(bool bit) {
-    if (elSize * BITS_IN_LONG - bitSize > 0) {      //   memory doesn't need to be added
-        if (bit) {
-            array[elSize - 1] = SetOneToBit(array[elSize - 1], BITS_IN_LONG - (bitSize % (int)BITS_IN_LONG) - 1);
-            bitSize++;
-        }
-        else {
-            array[elSize - 1] = SetZeroToBit(array[elSize - 1], BITS_IN_LONG - (bitSize % (int)BITS_IN_LONG) - 1);
-            bitSize++;
-        }
+    if (elSize * BITS_IN_LONG > bitSize) {      //   memory doesn't need to be added
+        int pos = BITS_IN_LONG - (bitSize % (int)BITS_IN_LONG) - 1;
+        array[bitSize / BITS_IN_LONG] = SetBit(bit, array[bitSize / BITS_IN_LONG], pos);
+        bitSize++;
     }
     else {      //   memory need to be added
         resize(bitSize + 1);
-        if (bit) {
-            array[elSize] = SetOneToBit(array[elSize], BITS_IN_LONG - (bitSize % (int)BITS_IN_LONG) - 1);
-            elSize++;
-            bitSize++;
-        }
-        else {
-            array[elSize] = SetZeroToBit(array[elSize], BITS_IN_LONG - (bitSize % (int)BITS_IN_LONG) - 1);
-            elSize++;
-            bitSize++;
-        }
+        int pos = BITS_IN_LONG - (bitSize % (int)BITS_IN_LONG);
+        array[bitSize / BITS_IN_LONG] = SetBit(bit, array[bitSize / BITS_IN_LONG], pos);
     }
 }
 
@@ -188,7 +171,59 @@ BitArray &BitArray::operator^=(const BitArray &b) {
     return (BitArray &) *this;
 }
 
-BitArray &BitArray::operator<<=(int n) {
-
+void BitArray::to_string () const
+{
+    string bit_array = "";
+    for (int i = 0; i < bitSize; i++)
+    {
+        unsigned long el = array[i / 32];
+        unsigned long mask = 1;
+        mask <<= 31 - (i % 32);
+        el &= mask;
+        if (el)
+        {
+            bit_array += '1';
+        }
+        else
+        {
+            bit_array += '0';
+        }
+    }
+    cout << bit_array;
 }
+
+BitArray &BitArray::operator<<=(int shift) {
+    if (shift < bitSize) {
+        for (int i = 0; i < bitSize - shift; i++) {
+            bool bit = CheckBit(array[(i + shift) / BITS_IN_LONG], BITS_IN_LONG - shift - i - 1);
+            array[i / BITS_IN_LONG] = SetBit(bit, array[i / BITS_IN_LONG], BITS_IN_LONG - 1 - i);
+
+            this->to_string();
+            cout << endl;
+        }
+
+        for (int i = bitSize - shift; i < bitSize; i++) {
+            int pos = BITS_IN_LONG - (i % (int) BITS_IN_LONG);
+            array[i / BITS_IN_LONG] = SetBit(0, array[i / BITS_IN_LONG], pos);
+
+            this->to_string();
+            cout << endl;
+        }
+    }
+    else {
+        for (int i = 0; i < bitSize; i++) {
+            int pos = BITS_IN_LONG - (i % (int)BITS_IN_LONG) - 1;
+            array[i / BITS_IN_LONG] = SetBit(0, array[i / BITS_IN_LONG], pos);
+
+            this->to_string();
+            cout << endl;
+        }
+    }
+    return *this;
+}
+
+
+
+
+
 

@@ -2,6 +2,7 @@
 #define CPP_LABS_BITARRAY_H
 
 #include <string>
+#include <iostream>
 using namespace std;
 //В этой задаче для простоты не требуется делать контейнер шаблонным,
 //но это вполне допускается по желанию студента.
@@ -19,7 +20,7 @@ public:
     ~BitArray();
 
 
-    BitArray(int num_bits);
+    //BitArray(int num_bits);
 
 
     //Конструирует массив, хранящий заданное количество бит.
@@ -27,16 +28,16 @@ public:
     explicit BitArray(int num_bits, unsigned long value = 0);
     BitArray(const BitArray &other);
 
-
+    int size();
     //Обменивает значения двух битовых массивов.
-    void swap(BitArray& a, BitArray& b);
+    void swap(BitArray& b);
 
     BitArray& operator=(const BitArray& b); /*https://www.youtube.com/watch?v=nMM98LVJn-U&list=PLQOaTSbfxUtCrKs0nicOg2npJQYSPGO9r&index=97&t=594s*/
 
 
     //Изменяет размер массива. В случае расширения, новые элементы
     //инициализируются значением value.
-    void resize(int num_bits, bool value = false);
+    void resize(int newBitSize, bool value = false);
     //Очищает массив.
     void clear();
     //Добавляет новый бит в конец массива. В случае необходимости
@@ -52,7 +53,7 @@ public:
     BitArray& operator^=(const BitArray& b);
 
     //Битовый сдвиг с заполнением нулями.
-    BitArray& operator<<=(int n);
+    BitArray& operator<<=(int shift);
     BitArray& operator>>=(int n);
     BitArray operator<<(int n) const;
     BitArray operator>>(int n) const;
@@ -85,7 +86,7 @@ public:
     bool empty() const;
 
     //Возвращает строковое представление массива.
-    std::string to_string() const;
+    /*std::string*/ void to_string() const;
 };
 
 bool operator==(const BitArray & a, const BitArray & b);
