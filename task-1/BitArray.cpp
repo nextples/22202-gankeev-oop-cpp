@@ -196,31 +196,66 @@ BitArray &BitArray::operator<<=(int shift) {
     if (shift < bitSize) {
         for (int i = 0; i < bitSize - shift; i++) {
             bool bit = CheckBit(array[(i + shift) / BITS_IN_LONG], BITS_IN_LONG - shift - i - 1);
-            array[i / BITS_IN_LONG] = SetBit(bit, array[i / BITS_IN_LONG], BITS_IN_LONG - 1 - i);
-
-            this->to_string();
-            cout << endl;
+            array[i / BITS_IN_LONG] = SetBit(bit, array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
         }
-
         for (int i = bitSize - shift; i < bitSize; i++) {
-            int pos = BITS_IN_LONG - (i % (int) BITS_IN_LONG);
+            int pos = BITS_IN_LONG - (i % (int) BITS_IN_LONG) - 1;
             array[i / BITS_IN_LONG] = SetBit(0, array[i / BITS_IN_LONG], pos);
-
-            this->to_string();
-            cout << endl;
         }
     }
     else {
         for (int i = 0; i < bitSize; i++) {
             int pos = BITS_IN_LONG - (i % (int)BITS_IN_LONG) - 1;
             array[i / BITS_IN_LONG] = SetBit(0, array[i / BITS_IN_LONG], pos);
-
-            this->to_string();
-            cout << endl;
         }
     }
     return *this;
 }
+
+BitArray &BitArray::operator>>=(int shift) {
+    if (shift < bitSize) {
+        for (int i = bitSize - 1; i >= shift; i--) {
+            bool bit = CheckBit(array[(i - shift) / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) + shift - 1);
+            array[i / BITS_IN_LONG] = SetBit(bit, array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
+        }
+        for (int i = 0; i < shift; i++) {
+            int pos = BITS_IN_LONG - (i % (int) BITS_IN_LONG) - 1;
+            array[i / BITS_IN_LONG] = SetBit(0, array[i / BITS_IN_LONG], pos);
+        }
+    }
+    else {
+        for (int i = 0; i < bitSize; i++) {
+            int pos = BITS_IN_LONG - (i % (int)BITS_IN_LONG) - 1;
+            array[i / BITS_IN_LONG] = SetBit(0, array[i / BITS_IN_LONG], pos);
+        }
+    }
+    return *this;
+}
+
+BitArray BitArray::operator<<(int shift) const {
+    BitArray newArray = *this;
+    newArray <<= shift;
+    return newArray;
+}
+
+BitArray BitArray::operator>>(int shift) const {
+    BitArray newArray = *this;
+    newArray >>= shift;
+    return newArray;
+}
+
+BitArray &BitArray::set(int pos, bool bit) {
+    array[pos / BITS_IN_LONG] = SetBit(bit, array[pos / BITS_IN_LONG], BITS_IN_LONG - (pos % BITS_IN_LONG) - 1);
+    return *this;
+}
+
+BitArray &BitArray::set() {
+    for (int i = 0; i < bitSize; i++) {
+        array[i / BITS_IN_LONG] = SetBit(1, array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
+    }
+    return *this;
+}
+
 
 
 

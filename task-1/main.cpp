@@ -16,14 +16,24 @@ int main() {
 //    cout << SetOneToBit(n, 0) << endl;
 
     BitArray array;
-    //array.resize(35, 0);
-    for (int i = 0; i < 10; i++) {
-        array.push_back(rand() % 2);
+    BitArray array2;
+    for (int i = 0; i < 113; i++) {
+        array.push_back(0);
+        //array2.push_back((rand() + 1) % 2);
     }
+//
+//    array2 = array << 2;
+//
     array.to_string();
     cout << endl;
-    array <<= 3;
+    array.set(111, 1);
     array.to_string();
     cout << endl;
+    array.set();
+    array.to_string();
+    cout << endl;
+//    array2.to_string();
+
+
     return 0;
 }
