@@ -17,23 +17,16 @@ int main() {
 
     BitArray array;
     BitArray array2;
-    for (int i = 0; i < 113; i++) {
-        array.push_back(0);
-        //array2.push_back((rand() + 1) % 2);
+    for (int i = 0; i < 11; i++) {
+        array.push_back(rand() % 2);
     }
-//
-//    array2 = array << 2;
-//
+    array2 = ~array;
     array.to_string();
     cout << endl;
-    array.set(111, 1);
-    array.to_string();
+    cout << array.count() << endl;
+    array2.to_string();
     cout << endl;
-    array.set();
-    array.to_string();
-    cout << endl;
-//    array2.to_string();
-
+    cout << array2.count() << endl;
 
     return 0;
 }

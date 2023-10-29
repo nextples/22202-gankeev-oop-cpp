@@ -256,6 +256,57 @@ BitArray &BitArray::set() {
     return *this;
 }
 
+BitArray &BitArray::reset(int pos) {
+    array[pos / BITS_IN_LONG] = SetBit(0, array[pos / BITS_IN_LONG], BITS_IN_LONG - (pos % BITS_IN_LONG) - 1);
+    return *this;
+}
+
+BitArray &BitArray::reset() {
+    for (int i = 0; i < bitSize; i++) {
+        array[i / BITS_IN_LONG] = SetBit(0, array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
+    }
+    return *this;
+}
+
+bool BitArray::any() const {
+    for (int i = 0; i < bitSize; i++) {
+        bool bit = CheckBit(array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
+        if (bit) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool BitArray::none() const {
+    bool bit = false;
+    for (int i = 0; i < bitSize; i++) {
+        bool bit = CheckBit(array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
+        if (bit) {
+            return false;
+        }
+    }
+    return true;
+}
+
+BitArray BitArray::operator~() const {
+    BitArray newArray = *this;
+    for (int i = 0; i < newArray.bitSize; i++) {
+        bool bit = CheckBit(array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
+        array[i / BITS_IN_LONG] = SetBit(1 - bit, array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
+    }
+    return newArray;
+}
+
+int BitArray::count() const {
+    int sum = 0;
+    for (int i = 0; i < bitSize; i++) {
+        bool bit = CheckBit(array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
+        sum += bit;
+    }
+    return sum;
+}
+
 
 
 

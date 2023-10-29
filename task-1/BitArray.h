@@ -64,8 +64,8 @@ public:
     //Заполняет массив истиной.
     BitArray& set();
 
-    //Устанавливает бит с индексом n в значение false.
-    BitArray& reset(int n);
+    //Устанавливает бит с индексом pos в значение false.
+    BitArray& reset(int pos);
     //Заполняет массив ложью.
     BitArray& reset();
 
