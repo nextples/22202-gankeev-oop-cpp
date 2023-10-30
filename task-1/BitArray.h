@@ -28,7 +28,6 @@ public:
     explicit BitArray(int num_bits, unsigned long value = 0);
     BitArray(const BitArray &other);
 
-    int size();
     //Обменивает значения двух битовых массивов.
     void swap(BitArray& b);
 
@@ -86,7 +85,7 @@ public:
     bool empty() const;
 
     //Возвращает строковое представление массива.
-    /*std::string*/ void to_string() const;
+    std::string to_string() const;
 };
 
 bool operator==(const BitArray & a, const BitArray & b);

@@ -1,5 +1,4 @@
 #include "BitArray.h"
-#include <limits.h>
 #include <iostream>
 
 #define BITS_IN_LONG (sizeof(unsigned long) * 8)
@@ -20,7 +19,7 @@ unsigned long SetBit(bool bit, unsigned long value, int pos) {
         value =  (value | (1 << pos));
         return value;
     }
-    if (bit == 0) {
+    else {
         value = (value & ~(1 << pos));
         return value;
     }
@@ -66,15 +65,11 @@ BitArray::BitArray(int num_bits, unsigned long value) {     // constructor with 
     array[0] = value;
 }
 
-int BitArray::size() {
-    return bitSize;
-}
-
 void BitArray::swap(BitArray &b) {
     // почему нельзя просто поменять указатели на эти объекты?? в чем смысл? почему в аргументах функции изначально один объект??
 }
 
-BitArray & BitArray::operator = (const BitArray &other) {
+BitArray & BitArray::operator=(const BitArray &other) {
     if (this->array != nullptr) {
         delete[] array;
     }
@@ -171,26 +166,21 @@ BitArray &BitArray::operator^=(const BitArray &b) {
     return (BitArray &) *this;
 }
 
-void BitArray::to_string () const
-{
-    string bit_array = "";
-    for (int i = 0; i < bitSize; i++)
-    {
-        unsigned long el = array[i / 32];
-        unsigned long mask = 1;
-        mask <<= 31 - (i % 32);
-        el &= mask;
-        if (el)
-        {
-            bit_array += '1';
+string BitArray::to_string() const {
+    string strArray = "";
+    for (int i = 0; i < bitSize; i++) {
+        bool bit = CheckBit(array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
+        if (bit) {
+            strArray += '1';
         }
-        else
-        {
-            bit_array += '0';
+        else {
+            strArray += '0';
         }
     }
-    cout << bit_array;
+    return strArray;
 }
+
+
 
 BitArray &BitArray::operator<<=(int shift) {
     if (shift < bitSize) {
@@ -307,6 +297,49 @@ int BitArray::count() const {
     return sum;
 }
 
+bool BitArray::operator[](int i) const {
+    bool bit = CheckBit(array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
+    return bit;
+}
+
+int BitArray::size() const {
+    return bitSize;
+}
+
+bool BitArray::empty() const {
+    if (bitSize == 0) {
+        return true;
+    }
+    return false;
+}
+
+bool operator==(const BitArray & a, const BitArray & b) {
+    if (a.size() != b.size()) {
+        return false;
+    }
+    else {
+        for (int i = 0; i < a.size(); i++) {
+            if (a[i] != b[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+bool operator!=(const BitArray & a, const BitArray & b) {
+    if (a.size() != b.size()) {
+        return true;
+    }
+    else {
+        for (int i = 0; i < a.size(); i++) {
+            if (a[i] != b[i]) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
 
 
 

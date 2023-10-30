@@ -18,15 +18,17 @@ int main() {
     BitArray array;
     BitArray array2;
     for (int i = 0; i < 11; i++) {
-        array.push_back(rand() % 2);
+        bool bit = rand() % 2;
+        array.push_back(bit);
+        array2.push_back(bit);
     }
-    array2 = ~array;
-    array.to_string();
-    cout << endl;
-    cout << array.count() << endl;
-    array2.to_string();
-    cout << endl;
-    cout << array2.count() << endl;
-
+    //array.set(2, false);
+    cout << array.to_string() << endl;
+    cout << array2.to_string() << endl;
+    array.set(10, false);
+    cout << array.to_string() << endl;
+    cout << array2.to_string() << endl;
+    bool cmp = array != array2;
+    cout << cmp << endl;
     return 0;
 }
