@@ -8,20 +8,15 @@ using namespace std;
 //но это вполне допускаетс€ по желанию студента.
 class BitArray {
 private:
-
-
     unsigned long *array;
     int bitSize;
     int elSize;
 
-
+    unsigned long CheckBit(const unsigned long value, const int pos) const;
+    unsigned long SetBit(bool bit, unsigned long value, int pos) const;
 public:
     BitArray();
     ~BitArray();
-
-
-    //BitArray(int num_bits);
-
 
     // онструирует массив, хран€щий заданное количество бит.
     //ѕервые sizeof(long) бит можно инициализровать с помощью параметра value.
@@ -85,15 +80,15 @@ public:
     bool empty() const;
 
     //¬озвращает строковое представление массива.
-    std::string to_string() const;
+    string to_string() const;
 };
 
 bool operator==(const BitArray & a, const BitArray & b);
 bool operator!=(const BitArray & a, const BitArray & b);
 
-BitArray operator&(const BitArray& b1, const BitArray& b2);
-BitArray operator|(const BitArray& b1, const BitArray& b2);
-BitArray operator^(const BitArray& b1, const BitArray& b2);
+BitArray operator&(const BitArray& a, const BitArray& b);
+BitArray operator|(const BitArray& a, const BitArray& b);
+BitArray operator^(const BitArray& a, const BitArray& b);
 
 
 #endif //CPP_LABS_BITARRAY_H

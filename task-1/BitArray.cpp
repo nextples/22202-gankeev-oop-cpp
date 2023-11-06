@@ -3,7 +3,7 @@
 
 #define BITS_IN_LONG (sizeof(unsigned long) * 8)
 
-unsigned long CheckBit(const unsigned long value, const int pos) {
+unsigned long BitArray::CheckBit(const unsigned long value, const int pos) const {
     unsigned long result;
     if ((value & (1 << pos)) == 0) {
         result = 0;
@@ -14,7 +14,7 @@ unsigned long CheckBit(const unsigned long value, const int pos) {
     return result;
 }
 
-unsigned long SetBit(bool bit, unsigned long value, int pos) {
+unsigned long BitArray::SetBit(bool bit, unsigned long value, int pos) const {
     if (bit == 1) {
         value =  (value | (1 << pos));
         return value;
@@ -25,13 +25,6 @@ unsigned long SetBit(bool bit, unsigned long value, int pos) {
     }
 }
 
-//unsigned long SetZeroToBit(unsigned long value, int position) {
-//    return (value & ~(1 << position));
-//}
-//
-//unsigned long SetOneToBit(unsigned long value, int position) {
-//    return (value | (1 << position));
-//}
 
 BitArray::BitArray() {      // create array constructor
     array = nullptr;
@@ -63,10 +56,6 @@ BitArray::BitArray(int num_bits, unsigned long value) {     // constructor with 
     }
     array = new unsigned long [elSize];
     array[0] = value;
-}
-
-void BitArray::swap(BitArray &b) {
-    // ÔÓ˜ÂÏÛ ÌÂÎ¸Áˇ ÔÓÒÚÓ ÔÓÏÂÌˇÚ¸ ÛÍ‡Á‡ÚÂÎË Ì‡ ˝ÚË Ó·˙ÂÍÚ˚?? ‚ ˜ÂÏ ÒÏ˚ÒÎ? ÔÓ˜ÂÏÛ ‚ ‡„ÛÏÂÌÚ‡ı ÙÛÌÍˆËË ËÁÌ‡˜‡Î¸ÌÓ Ó‰ËÌ Ó·˙ÂÍÚ??
 }
 
 BitArray & BitArray::operator=(const BitArray &other) {
@@ -185,7 +174,7 @@ string BitArray::to_string() const {
 BitArray &BitArray::operator<<=(int shift) {
     if (shift < bitSize) {
         for (int i = 0; i < bitSize - shift; i++) {
-            bool bit = CheckBit(array[(i + shift) / BITS_IN_LONG], BITS_IN_LONG - shift - i - 1);
+            bool bit = CheckBit(array[(i + shift) / BITS_IN_LONG], BITS_IN_LONG - shift - (i % BITS_IN_LONG) - 1); //
             array[i / BITS_IN_LONG] = SetBit(bit, array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
         }
         for (int i = bitSize - shift; i < bitSize; i++) {
@@ -313,6 +302,51 @@ bool BitArray::empty() const {
     return false;
 }
 
+
+void BitArray::swap(BitArray &b) {
+    int newBitSize = 0;
+    BitArray tmpArray;
+    bool copyThis = 0;
+    if (this->bitSize > b.bitSize) {
+        newBitSize = this->bitSize;
+        copyThis = 1;
+    } else {
+        newBitSize = b.bitSize;
+        copyThis = 0;
+    }
+
+    tmpArray.resize(newBitSize);
+    for (int i = 0; i < tmpArray.bitSize; i++) {
+        bool bit = 0;
+        if (copyThis) {
+            bit = CheckBit(this->array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
+        } else {
+            bit = CheckBit(b.array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
+        }
+        tmpArray.set(i, bit);
+    }
+    if (copyThis) {
+        this->array = b.array;
+        this->elSize = b.elSize;
+        this->bitSize = b.bitSize;
+
+        b.array = tmpArray.array;
+        b.elSize = tmpArray.elSize;
+        b.bitSize = tmpArray.bitSize;
+        delete tmpArray.array;
+    }
+    else {
+        b.array = this->array;
+        b.elSize = this->elSize;
+        b.bitSize = this->bitSize;
+
+        this->array = tmpArray.array;
+        this->elSize = tmpArray.elSize;
+        this->bitSize = tmpArray.bitSize;
+        delete tmpArray.array;
+    }
+}
+
 bool operator==(const BitArray & a, const BitArray & b) {
     if (a.size() != b.size()) {
         return false;
@@ -341,7 +375,38 @@ bool operator!=(const BitArray & a, const BitArray & b) {
     }
 }
 
+BitArray operator&(const BitArray& a, const BitArray& b) {
+    if (a.size() != b.size()) {
+        // Œ¡–¿¡Œ“¿“‹ Œÿ»¡ ”
+    }
+    BitArray newArray(a.size());
+    for (int i = 0; i < a.size(); i++) {
+        newArray.set(i, a[i] & b[i]);
+    }
+    return newArray;
+}
 
+BitArray operator|(const BitArray& a, const BitArray& b) {
+    if (a.size() != b.size()) {
+        // Œ¡–¿¡Œ“¿“‹ Œÿ»¡ ”
+    }
+    BitArray newArray(a.size());
+    for (int i = 0; i < a.size(); i++) {
+        newArray.set(i, a[i] | b[i]);
+    }
+    return newArray;
+}
+
+BitArray operator^(const BitArray& a, const BitArray& b) {
+    if (a.size() != b.size()) {
+        // Œ¡–¿¡Œ“¿“‹ Œÿ»¡ ”
+    }
+    BitArray newArray(a.size());
+    for (int i = 0; i < a.size(); i++) {
+        newArray.set(i, a[i] ^ b[i]);
+    }
+    return newArray;
+}
 
 
 

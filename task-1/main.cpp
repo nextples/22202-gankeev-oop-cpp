@@ -20,15 +20,14 @@ int main() {
     for (int i = 0; i < 11; i++) {
         bool bit = rand() % 2;
         array.push_back(bit);
-        array2.push_back(bit);
+        array2.push_back(1 - bit);
     }
-    //array.set(2, false);
+    array.push_back(1);
+
     cout << array.to_string() << endl;
     cout << array2.to_string() << endl;
-    array.set(10, false);
+    array.swap(array2);
     cout << array.to_string() << endl;
     cout << array2.to_string() << endl;
-    bool cmp = array != array2;
-    cout << cmp << endl;
     return 0;
 }
