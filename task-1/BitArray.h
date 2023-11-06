@@ -12,8 +12,8 @@ private:
     int bitSize;
     int elSize;
 
-    unsigned long CheckBit(const unsigned long value, const int pos) const;
-    unsigned long SetBit(bool bit, unsigned long value, int pos) const;
+    bool CheckBit(const unsigned long value, const int pos) const;
+    unsigned long SetBit(const bool bit, unsigned long value, const int pos) const;
 public:
     BitArray();
     ~BitArray();

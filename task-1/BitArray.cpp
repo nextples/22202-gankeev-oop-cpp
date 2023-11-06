@@ -1,9 +1,10 @@
 #include "BitArray.h"
 #include <iostream>
+#include <cassert>
 
 #define BITS_IN_LONG (sizeof(unsigned long) * 8)
 
-unsigned long BitArray::CheckBit(const unsigned long value, const int pos) const {
+bool BitArray::CheckBit(const unsigned long value, const int pos) const {
     unsigned long result;
     if ((value & (1 << pos)) == 0) {
         result = 0;
@@ -14,7 +15,7 @@ unsigned long BitArray::CheckBit(const unsigned long value, const int pos) const
     return result;
 }
 
-unsigned long BitArray::SetBit(bool bit, unsigned long value, int pos) const {
+unsigned long BitArray::SetBit(const bool bit, unsigned long value, const int pos) const {
     if (bit == 1) {
         value =  (value | (1 << pos));
         return value;
@@ -59,9 +60,7 @@ BitArray::BitArray(int num_bits, unsigned long value) {     // constructor with 
 }
 
 BitArray & BitArray::operator=(const BitArray &other) {
-    if (this->array != nullptr) {
-        delete[] array;
-    }
+    delete[] array;
     this->elSize = other.elSize;
     this->bitSize = other.bitSize;
     this->array = new unsigned long [other.elSize];
@@ -73,13 +72,13 @@ BitArray & BitArray::operator=(const BitArray &other) {
 }
 
 void BitArray::resize(int newBitSize, bool value) {   //»ÁÏÂÌˇÂÚ ‡ÁÏÂ Ï‡ÒÒË‚‡. ¬ ÒÎÛ˜‡Â ‡Ò¯ËÂÌËˇ, ÌÓ‚˚Â ˝ÎÂÏÂÌÚ˚ ËÌËˆË‡ÎËÁËÛ˛ÚÒˇ ÁÌ‡˜ÂÌËÂÏ value.
-    int newElSize = 0;
+    int newElSize;
     if (newBitSize % BITS_IN_LONG == 0) {
         newElSize = (int) (newBitSize / BITS_IN_LONG);
     } else {
         newElSize = (int) (newBitSize / BITS_IN_LONG + 1);
     }
-    unsigned long *newArray = new unsigned long[newElSize];
+    auto *newArray = new unsigned long[newElSize];
 
     if (newBitSize > bitSize) {
         for (int i = 0; i < bitSize; i++) {
@@ -89,7 +88,8 @@ void BitArray::resize(int newBitSize, bool value) {   //»ÁÏÂÌˇÂÚ ‡ÁÏÂ Ï‡ÒÒË‚‡.
             int pos = BITS_IN_LONG - (int) (i % BITS_IN_LONG);
             newArray[i / BITS_IN_LONG] = SetBit(value, newArray[i / BITS_IN_LONG], pos);
         }
-    } else {
+    }
+    else {
         for (int i = 0; i < newBitSize; i++) {
             newArray[i / BITS_IN_LONG] = array[i / BITS_IN_LONG];
         }
@@ -120,43 +120,31 @@ void BitArray::push_back(bool bit) {
 }
 
 BitArray &BitArray::operator&=(const BitArray &b) {
-    if (bitSize != b.bitSize) {
-        cout << "Error: different sizes of arrays! Operation is cancelled" << endl; // Œ¡–¿¡Œ“¿“‹ Œÿ»¡ ”!!!
-    }
-    else {
-        for (int i = 0; i < elSize; i++) {
-            array[i] = array[i] & b.array[i];
-        }
+    assert(bitSize == b.bitSize && "incorrect size of arrays");
+    for (int i = 0; i < elSize; i++) {
+        array[i] = array[i] & b.array[i];
     }
     return (BitArray &) *this;
 }
 
 BitArray &BitArray::operator|=(const BitArray &b) {
-    if (bitSize != b.bitSize) {
-        cout << "Error: different sizes of arrays! Operation is cancelled" << endl; // Œ¡–¿¡Œ“¿“‹ Œÿ»¡ ”!!!
-    }
-    else {
-        for (int i = 0; i < elSize; i++) {
-            array[i] = array[i] | b.array[i];
-        }
+    assert(bitSize == b.bitSize && "incorrect size of arrays");
+    for (int i = 0; i < elSize; i++) {
+        array[i] = array[i] | b.array[i];
     }
     return (BitArray &) *this;
 }
 
 BitArray &BitArray::operator^=(const BitArray &b) {
-    if (bitSize != b.bitSize) {
-        cout << "Error: different sizes of arrays! Operation is cancelled" << endl; // Œ¡–¿¡Œ“¿“‹ Œÿ»¡ ”!!!
-    }
-    else {
-        for (int i = 0; i < elSize; i++) {
-            array[i] = array[i] ^ b.array[i];
-        }
+    assert(bitSize == b.bitSize && "incorrect size of arrays");
+    for (int i = 0; i < elSize; i++) {
+        array[i] = array[i] ^ b.array[i];
     }
     return (BitArray &) *this;
 }
 
 string BitArray::to_string() const {
-    string strArray = "";
+    string strArray = {};
     for (int i = 0; i < bitSize; i++) {
         bool bit = CheckBit(array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
         if (bit) {
@@ -172,26 +160,28 @@ string BitArray::to_string() const {
 
 
 BitArray &BitArray::operator<<=(int shift) {
+    assert(shift >= 0 && "shift is above zero");
     if (shift < bitSize) {
         for (int i = 0; i < bitSize - shift; i++) {
-            bool bit = CheckBit(array[(i + shift) / BITS_IN_LONG], BITS_IN_LONG - shift - (i % BITS_IN_LONG) - 1); //
+            bool bit = CheckBit(array[(i + shift) / BITS_IN_LONG], BITS_IN_LONG - shift - (i % BITS_IN_LONG) - 1);
             array[i / BITS_IN_LONG] = SetBit(bit, array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
         }
         for (int i = bitSize - shift; i < bitSize; i++) {
             int pos = BITS_IN_LONG - (i % (int) BITS_IN_LONG) - 1;
-            array[i / BITS_IN_LONG] = SetBit(0, array[i / BITS_IN_LONG], pos);
+            array[i / BITS_IN_LONG] = SetBit(false, array[i / BITS_IN_LONG], pos);
         }
     }
     else {
         for (int i = 0; i < bitSize; i++) {
             int pos = BITS_IN_LONG - (i % (int)BITS_IN_LONG) - 1;
-            array[i / BITS_IN_LONG] = SetBit(0, array[i / BITS_IN_LONG], pos);
+            array[i / BITS_IN_LONG] = SetBit(false, array[i / BITS_IN_LONG], pos);
         }
     }
     return *this;
 }
 
 BitArray &BitArray::operator>>=(int shift) {
+    assert(shift >= 0 && "shift is above zero");
     if (shift < bitSize) {
         for (int i = bitSize - 1; i >= shift; i--) {
             bool bit = CheckBit(array[(i - shift) / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) + shift - 1);
@@ -199,50 +189,54 @@ BitArray &BitArray::operator>>=(int shift) {
         }
         for (int i = 0; i < shift; i++) {
             int pos = BITS_IN_LONG - (i % (int) BITS_IN_LONG) - 1;
-            array[i / BITS_IN_LONG] = SetBit(0, array[i / BITS_IN_LONG], pos);
+            array[i / BITS_IN_LONG] = SetBit(false, array[i / BITS_IN_LONG], pos);
         }
     }
     else {
         for (int i = 0; i < bitSize; i++) {
             int pos = BITS_IN_LONG - (i % (int)BITS_IN_LONG) - 1;
-            array[i / BITS_IN_LONG] = SetBit(0, array[i / BITS_IN_LONG], pos);
+            array[i / BITS_IN_LONG] = SetBit(false, array[i / BITS_IN_LONG], pos);
         }
     }
     return *this;
 }
 
 BitArray BitArray::operator<<(int shift) const {
+    assert(shift >= 0 && "shift is above zero");
     BitArray newArray = *this;
     newArray <<= shift;
     return newArray;
 }
 
 BitArray BitArray::operator>>(int shift) const {
+    assert(shift >= 0 && "shift is above zero");
     BitArray newArray = *this;
     newArray >>= shift;
     return newArray;
 }
 
 BitArray &BitArray::set(int pos, bool bit) {
+    assert(pos >= bitSize && "array index out of bounds");
     array[pos / BITS_IN_LONG] = SetBit(bit, array[pos / BITS_IN_LONG], BITS_IN_LONG - (pos % BITS_IN_LONG) - 1);
     return *this;
 }
 
 BitArray &BitArray::set() {
     for (int i = 0; i < bitSize; i++) {
-        array[i / BITS_IN_LONG] = SetBit(1, array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
+        array[i / BITS_IN_LONG] = SetBit(true, array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
     }
     return *this;
 }
 
 BitArray &BitArray::reset(int pos) {
-    array[pos / BITS_IN_LONG] = SetBit(0, array[pos / BITS_IN_LONG], BITS_IN_LONG - (pos % BITS_IN_LONG) - 1);
+    assert(pos >= bitSize && "array index out of bounds");
+    array[pos / BITS_IN_LONG] = SetBit(false, array[pos / BITS_IN_LONG], BITS_IN_LONG - (pos % BITS_IN_LONG) - 1);
     return *this;
 }
 
 BitArray &BitArray::reset() {
     for (int i = 0; i < bitSize; i++) {
-        array[i / BITS_IN_LONG] = SetBit(0, array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
+        array[i / BITS_IN_LONG] = SetBit(false, array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
     }
     return *this;
 }
@@ -258,7 +252,6 @@ bool BitArray::any() const {
 }
 
 bool BitArray::none() const {
-    bool bit = false;
     for (int i = 0; i < bitSize; i++) {
         bool bit = CheckBit(array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
         if (bit) {
@@ -304,20 +297,20 @@ bool BitArray::empty() const {
 
 
 void BitArray::swap(BitArray &b) {
-    int newBitSize = 0;
+    int newBitSize;
     BitArray tmpArray;
-    bool copyThis = 0;
+    bool copyThis;
     if (this->bitSize > b.bitSize) {
         newBitSize = this->bitSize;
-        copyThis = 1;
+        copyThis = true;
     } else {
         newBitSize = b.bitSize;
-        copyThis = 0;
+        copyThis = false;
     }
 
     tmpArray.resize(newBitSize);
     for (int i = 0; i < tmpArray.bitSize; i++) {
-        bool bit = 0;
+        bool bit;
         if (copyThis) {
             bit = CheckBit(this->array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
         } else {
@@ -376,9 +369,7 @@ bool operator!=(const BitArray & a, const BitArray & b) {
 }
 
 BitArray operator&(const BitArray& a, const BitArray& b) {
-    if (a.size() != b.size()) {
-        // Œ¡–¿¡Œ“¿“‹ Œÿ»¡ ”
-    }
+    assert(a.size() == b.size() && "incorrect size of arrays");
     BitArray newArray(a.size());
     for (int i = 0; i < a.size(); i++) {
         newArray.set(i, a[i] & b[i]);
@@ -387,9 +378,7 @@ BitArray operator&(const BitArray& a, const BitArray& b) {
 }
 
 BitArray operator|(const BitArray& a, const BitArray& b) {
-    if (a.size() != b.size()) {
-        // Œ¡–¿¡Œ“¿“‹ Œÿ»¡ ”
-    }
+    assert(a.size() == b.size() && "incorrect size of arrays");
     BitArray newArray(a.size());
     for (int i = 0; i < a.size(); i++) {
         newArray.set(i, a[i] | b[i]);
@@ -398,9 +387,7 @@ BitArray operator|(const BitArray& a, const BitArray& b) {
 }
 
 BitArray operator^(const BitArray& a, const BitArray& b) {
-    if (a.size() != b.size()) {
-        // Œ¡–¿¡Œ“¿“‹ Œÿ»¡ ”
-    }
+    assert(a.size() == b.size() && "incorrect size of arrays");
     BitArray newArray(a.size());
     for (int i = 0; i < a.size(); i++) {
         newArray.set(i, a[i] ^ b[i]);
