@@ -47,13 +47,14 @@ BitArray::BitArray(const BitArray &other) {     // copy constructor
     }
 }
 
-BitArray::BitArray(int num_bits, unsigned long value) {     // constructor with start value
-    bitSize = num_bits;
-    if (num_bits % sizeof(unsigned long) == 0) {
-        elSize = (int)(num_bits / BITS_IN_LONG);
+BitArray::BitArray(int bitSize, unsigned long value) {     // constructor with start value
+    assert(bitSize >= 0 && "size of array is above zero");
+    this->bitSize = bitSize;
+    if (bitSize % sizeof(unsigned long) == 0) {
+        elSize = (int)(bitSize / BITS_IN_LONG);
     }
     else {
-        elSize = (int)(num_bits / BITS_IN_LONG + 1);
+        elSize = (int)(bitSize / BITS_IN_LONG + 1);
     }
     array = new unsigned long [elSize];
     array[0] = value;
@@ -72,6 +73,7 @@ BitArray & BitArray::operator=(const BitArray &other) {
 }
 
 void BitArray::resize(int newBitSize, bool value) {   //Изменяет размер массива. В случае расширения, новые элементы инициализируются значением value.
+    assert(bitSize >= 0 && "size of array is above zero");
     int newElSize;
     if (newBitSize % BITS_IN_LONG == 0) {
         newElSize = (int) (newBitSize / BITS_IN_LONG);
