@@ -138,5 +138,73 @@ TEST(Methods, Reset2) {
 }
 
 TEST(Methods, Any) {
+    BitArray array;
+    for (int i = 0; i < 250; i++) {
+        array.push_back(0);
+    }
+    ASSERT_EQ(array.any(), 0);
+    array.set(201, 1);
+    ASSERT_EQ(array.any(), 1);
+}
 
+TEST(Methods, None) {
+    BitArray array;
+    for (int i = 0; i < 250; i++) {
+        array.push_back(0);
+    }
+    ASSERT_EQ(array.none(), 1);
+    array.set(152, 1);
+    ASSERT_EQ(array.none(), 0);
+}
+
+TEST(Methods, Count) {
+    BitArray array;
+    for (int i = 0; i < 250; i++) {
+        array.push_back(0);
+    }
+    ASSERT_EQ(array.count(), 0);
+    array.set(12, 1);
+    ASSERT_EQ(array.count(), 1);
+    array.set(42, 1);
+    ASSERT_EQ(array.count(), 2);
+    array.reset();
+    ASSERT_EQ(array.count(), 0);
+}
+
+TEST(Methods, Size) {
+    BitArray array;
+    ASSERT_EQ(array.size(), 0);
+    for (int i = 0; i < 250; i++) {
+        array.push_back(rand() % 2);
+    }
+    ASSERT_EQ(array.size(), 250);
+    array.resize(100);
+    ASSERT_EQ(array.size(), 100);
+}
+
+TEST(Methods, Empty) {
+    BitArray array;
+    ASSERT_EQ(array.size(), 0);
+    for (int i = 0; i < 250; i++) {
+        array.push_back(rand() % 2);
+    }
+    ASSERT_EQ(array.size(), 250);
+    array.resize(100);
+    ASSERT_EQ(array.size(), 100);
+}
+
+TEST(Methods, To_string) {
+    BitArray array;
+    for (int i = 0; i < 10; i++) {
+        array.push_back(1);
+    }
+    ASSERT_EQ(array.to_string(), "1111111111");
+    array.set(0, 0);
+    ASSERT_EQ(array.to_string(), "0111111111");
+    array.set(3, 0);
+    ASSERT_EQ(array.to_string(), "0110111111");
+    array.set(9, 0);
+    ASSERT_EQ(array.to_string(), "0110111110");
+    array.reset();
+    ASSERT_EQ(array.to_string(), "0000000000");
 }
