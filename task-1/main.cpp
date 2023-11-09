@@ -1,14 +1,6 @@
 #include <iostream>
 #include "BitArray.h"
 
-unsigned long SetZeroToBit(unsigned long value, int position) {
-    return (value & ~(1 << position));
-}
-
-unsigned long SetOneToBit(unsigned long value, int position) {
-    return (value | (1 << position));
-}
-
 int main() {
     BitArray array;
     BitArray array2;

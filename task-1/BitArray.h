@@ -12,22 +12,21 @@ private:
     int bitSize;
     int elSize;
 
-    bool CheckBit(const unsigned long value, const int pos) const;
-    unsigned long SetBit(const bool bit, unsigned long value, const int pos) const;
+    bool CheckBit(unsigned long value, int pos) const;
+    unsigned long SetBit(bool bit, unsigned long value, int pos) const;
 public:
     BitArray();
     ~BitArray();
 
     //Конструирует массив, хранящий заданное количество бит.
     //Первые sizeof(long) бит можно инициализровать с помощью параметра value.
-    explicit BitArray(int num_bits, unsigned long value = 0);
+    explicit BitArray(int bitSize, unsigned long value = 0);
     BitArray(const BitArray &other);
 
     //Обменивает значения двух битовых массивов.
     void swap(BitArray& b);
 
-    BitArray& operator=(const BitArray& b); /*https://www.youtube.com/watch?v=nMM98LVJn-U&list=PLQOaTSbfxUtCrKs0nicOg2npJQYSPGO9r&index=97&t=594s*/
-
+    BitArray& operator=(const BitArray& b);
 
     //Изменяет размер массива. В случае расширения, новые элементы
     //инициализируются значением value.
