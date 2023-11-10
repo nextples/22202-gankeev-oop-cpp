@@ -34,8 +34,10 @@ BitArray::BitArray() {      // create array constructor
 }
 
 BitArray::~BitArray() {     // destructor
-        delete[] array;
-        array = nullptr;
+        if (array != nullptr) {
+            delete[] array;
+            array = nullptr;
+        }
 }
 
 BitArray::BitArray(const BitArray &other) {     // copy constructor
@@ -50,9 +52,17 @@ BitArray::BitArray(const BitArray &other) {     // copy constructor
 
 BitArray::BitArray(int bitSize, unsigned long value) {     // constructor with start value
     assert(bitSize >= 0 && "Constructor: size of array is above zero");
+    int newElSize;
+    if (bitSize % BITS_IN_LONG == 0) {
+        newElSize = (int)(bitSize / BITS_IN_LONG);
+    }
+    else {
+        newElSize = (int)(bitSize / BITS_IN_LONG) + 1;
+
+    }
     array = new unsigned long [bitSize / BITS_IN_LONG];
     this->bitSize = bitSize;
-    this->elSize = (int)(bitSize / BITS_IN_LONG);
+    this->elSize = newElSize;
     for (int i = 0; i < BITS_IN_LONG; i++) {
         bool bit = CheckBit(value, BITS_IN_LONG - i - 1);
         array[i / BITS_IN_LONG] = SetBit(bit, array[i / BITS_IN_LONG], BITS_IN_LONG - i - 1);
@@ -76,10 +86,13 @@ void BitArray::resize(int newBitSize, bool value) {   //Изменяет размер массива.
     int newElSize;
     if (newBitSize % BITS_IN_LONG == 0) {
         newElSize = (int) (newBitSize / BITS_IN_LONG);
-    } else {
+    }
+    else {
         newElSize = (int) (newBitSize / BITS_IN_LONG + 1);
     }
     auto *newArray = new unsigned long[newElSize];
+
+
 
     if (newBitSize > bitSize) {
         for (int i = 0; i < bitSize; i++) {
@@ -284,6 +297,7 @@ int BitArray::count() const {
 }
 
 bool BitArray::operator[](int i) const {
+    assert(i < this->size() && "operator []: array index out of bounds");
     bool bit = CheckBit(array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
     return bit;
 }
@@ -335,28 +349,58 @@ bool operator!=(const BitArray & a, const BitArray & b) {
 }
 
 BitArray operator&(const BitArray& a, const BitArray& b) {
-    assert(a.size() == b.size() && "operator &: incorrect size of arrays");
-    BitArray newArray(a.size());
-    for (int i = 0; i < a.size(); i++) {
-        newArray.set(i, a[i] & b[i]);
+    int newArraySize = max(a.size(), b.size());
+    BitArray newArray(newArraySize);
+    for (int i = 0; i < newArray.size(); i++) {
+        if (i < a.size() && i < b.size()) {
+            newArray.set(i, a[i] & b[i]);
+        }
+        else {
+            if (i > a.size()) {
+                newArray.set(i, b[i]);
+            }
+            else {
+                newArray.set(i, a[i]);
+            }
+        }
     }
     return newArray;
 }
 
 BitArray operator|(const BitArray& a, const BitArray& b) {
-    assert(a.size() == b.size() && "operator |: incorrect size of arrays");
-    BitArray newArray(a.size());
-    for (int i = 0; i < a.size(); i++) {
-        newArray.set(i, a[i] | b[i]);
+    int newArraySize = max(a.size(), b.size());
+    BitArray newArray(newArraySize);
+    for (int i = 0; i < newArray.size(); i++) {
+        if (i < a.size() && i < b.size()) {
+            newArray.set(i, a[i] | b[i]);
+        }
+        else {
+            if (i > a.size()) {
+                newArray.set(i, b[i]);
+            }
+            else {
+                newArray.set(i, a[i]);
+            }
+        }
     }
     return newArray;
 }
 
 BitArray operator^(const BitArray& a, const BitArray& b) {
-    assert(a.size() == b.size() && "operator ^: incorrect size of arrays");
-    BitArray newArray(a.size());
-    for (int i = 0; i < a.size(); i++) {
-        newArray.set(i, a[i] ^ b[i]);
+    int newArraySize = max(a.size(), b.size());
+    BitArray newArray(newArraySize);
+    for (int i = 0; i < newArray.size(); i++) {
+        if (i < a.size() && i < b.size()) {
+            newArray.set(i, a[i] ^ b[i]);
+        }
+        else {
+            if (i > a.size()) {
+                newArray.set(i, b[i]);
+            }
+            else {
+                newArray.set(i, a[i]);
+            }
+        }
     }
     return newArray;
 }

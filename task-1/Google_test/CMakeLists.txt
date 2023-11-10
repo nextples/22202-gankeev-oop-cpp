@@ -14,5 +14,9 @@ add_executable(GTest_Constructors Constructors.cpp
 add_executable(GTest_Methods Methods.cpp
         ../BitArray.cpp)
 
+add_executable(GTest_Operators Operators.cpp
+        ../BitArray.cpp)
+
 target_link_libraries(GTest_Constructors gtest gtest_main)
 target_link_libraries(GTest_Methods gtest gtest_main)
+target_link_libraries(GTest_Operators gtest gtest_main)
