@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(task-0 task-0/main.cpp)
 add_executable(task-1 task-1/main.cpp
         task-1/BitArray.cpp
-        task-1/BitArray.h)
+        task-1/BitArray.h
+)
 
 add_subdirectory(task-1/Google_test)

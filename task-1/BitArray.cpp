@@ -92,8 +92,6 @@ void BitArray::resize(int newBitSize, bool value) {   //Изменяет размер массива.
     }
     auto *newArray = new unsigned long[newElSize];
 
-
-
     if (newBitSize > bitSize) {
         for (int i = 0; i < bitSize; i++) {
             newArray[i / BITS_IN_LONG] = array[i / BITS_IN_LONG];
@@ -296,11 +294,11 @@ int BitArray::count() const {
     return sum;
 }
 
-bool BitArray::operator[](int i) const {
-    assert(i < this->size() && "operator []: array index out of bounds");
-    bool bit = CheckBit(array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
-    return bit;
-}
+//bool BitArray::operator[](int i) const {
+//    assert(i < this->size() && "operator []: array index out of bounds");
+//    bool bit = CheckBit(array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
+//    return bit;
+//}
 
 int BitArray::size() const {
     return bitSize;
@@ -320,13 +318,24 @@ void BitArray::swap(BitArray &b) {
     *this = tmp;
 }
 
+BitArray::Wrapper BitArray::operator[](int i) {
+    assert(i < this->size() && "operator[]: array index out of bounds");
+    return BitArray::Wrapper(this, i);
+}
+
+bool BitArray::getBit(int ind) const{
+    assert(ind < this->size() && "getBit: array index out of bounds");
+    bool bit = CheckBit(array[ind / BITS_IN_LONG], BITS_IN_LONG - (ind % BITS_IN_LONG) - 1);
+    return bit;
+}
+
 bool operator==(const BitArray & a, const BitArray & b) {
     if (a.size() != b.size()) {
         return false;
     }
     else {
         for (int i = 0; i < a.size(); i++) {
-            if (a[i] != b[i]) {
+            if (a.getBit(i) != b.getBit(i)) {
                 return false;
             }
         }
@@ -340,7 +349,7 @@ bool operator!=(const BitArray & a, const BitArray & b) {
     }
     else {
         for (int i = 0; i < a.size(); i++) {
-            if (a[i] != b[i]) {
+            if (a.getBit(i) != b.getBit(i)) {
                 return true;
             }
         }
@@ -353,14 +362,14 @@ BitArray operator&(const BitArray& a, const BitArray& b) {
     BitArray newArray(newArraySize);
     for (int i = 0; i < newArray.size(); i++) {
         if (i < a.size() && i < b.size()) {
-            newArray.set(i, a[i] & b[i]);
+            newArray.set(i, a.getBit(i) & b.getBit(i));
         }
         else {
             if (i > a.size()) {
-                newArray.set(i, b[i]);
+                newArray.set(i, b.getBit(i));
             }
             else {
-                newArray.set(i, a[i]);
+                newArray.set(i, a.getBit(i));
             }
         }
     }
@@ -372,14 +381,14 @@ BitArray operator|(const BitArray& a, const BitArray& b) {
     BitArray newArray(newArraySize);
     for (int i = 0; i < newArray.size(); i++) {
         if (i < a.size() && i < b.size()) {
-            newArray.set(i, a[i] | b[i]);
+            newArray.set(i, a.getBit(i) | b.getBit(i));
         }
         else {
             if (i > a.size()) {
-                newArray.set(i, b[i]);
+                newArray.set(i, b.getBit(i));
             }
             else {
-                newArray.set(i, a[i]);
+                newArray.set(i, a.getBit(i));
             }
         }
     }
@@ -391,20 +400,26 @@ BitArray operator^(const BitArray& a, const BitArray& b) {
     BitArray newArray(newArraySize);
     for (int i = 0; i < newArray.size(); i++) {
         if (i < a.size() && i < b.size()) {
-            newArray.set(i, a[i] ^ b[i]);
+            newArray.set(i, a.getBit(i) ^ b.getBit(i));
         }
         else {
             if (i > a.size()) {
-                newArray.set(i, b[i]);
+                newArray.set(i, b.getBit(i));
             }
             else {
-                newArray.set(i, a[i]);
+                newArray.set(i, a.getBit(i));
             }
         }
     }
     return newArray;
 }
 
+BitArray::Wrapper::Wrapper(BitArray *BitArray, int ind) {
+    this->adrArr = BitArray;
+    this->index = ind;
+}
 
-
-
+BitArray::Wrapper& BitArray::Wrapper::operator=(bool bit) {
+    this->adrArr->set(bit, index);
+    return *this;
+}

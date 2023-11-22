@@ -15,8 +15,8 @@ TEST(Methods, Swap1) {
     ASSERT_EQ(array1.size(), array2Copy.size());
     ASSERT_EQ(array2.size(), array1Copy.size());
     for (int i = 0; i < size; i++) {
-        ASSERT_EQ(array1[i], array2Copy[i]);
-        ASSERT_EQ(array2[i], array1Copy[i]);
+        ASSERT_EQ(array1.getBit(i), array2Copy.getBit(i));
+        ASSERT_EQ(array2.getBit(i), array1Copy.getBit(i));
     }
 }
 
@@ -34,8 +34,8 @@ TEST(Methods, Swap2) {
     ASSERT_EQ(array1.size(), array2Copy.size());
     ASSERT_EQ(array2.size(), array1Copy.size());
     for (int i = 0; i < size; i++) {
-        ASSERT_EQ(array1[i], array2Copy[i]);
-        ASSERT_EQ(array2[i], array1Copy[i]);
+        ASSERT_EQ(array1.getBit(i), array2Copy.getBit(i));
+        ASSERT_EQ(array2.getBit(i), array1Copy.getBit(i));
     }
 }
 
@@ -52,10 +52,10 @@ TEST(Methods, Resize1) {
     ASSERT_EQ(array.size(), 5);
     for (int i = 0; i < 5; i++) {
         if (i < 2) {
-            ASSERT_EQ(array[i], 0);
+            ASSERT_EQ(array.getBit(i), 0);
         }
         else {
-            ASSERT_EQ(array[i], 1);
+            ASSERT_EQ(array.getBit(i), 1);
         }
     }
 }
@@ -76,26 +76,26 @@ TEST(Methods, Push_back) {
     ASSERT_EQ(array.size(), 0);
     array.push_back(true);
     ASSERT_EQ(array.size(), 1);
-    ASSERT_EQ(array[0], 1);
+    ASSERT_EQ(array.getBit(0), 1);
     array.push_back(0);
     ASSERT_EQ(array.size(), 2);
-    ASSERT_EQ(array[0], 1);
-    ASSERT_EQ(array[1], 0);
+    ASSERT_EQ(array.getBit(0), 1);
+    ASSERT_EQ(array.getBit(1), 0);
 }
 
 TEST(Methods, Set1) {
     BitArray array(32, 0);
     for (int i = 0; i < 32; i++) {
-        ASSERT_EQ(array[i], 0);
+        ASSERT_EQ(array.getBit(i), 0);
     }
     array.set(0, 1);
-    ASSERT_EQ(array[0], 1);
+    ASSERT_EQ(array.getBit(0), 1);
     array.set(1, 1);
-    ASSERT_EQ(array[0], 1);
-    ASSERT_EQ(array[1], 1);
+    ASSERT_EQ(array.getBit(0), 1);
+    ASSERT_EQ(array.getBit(1), 1);
     array.set(1, 0);
-    ASSERT_EQ(array[0], 1);
-    ASSERT_EQ(array[1], 0);
+    ASSERT_EQ(array.getBit(0), 1);
+    ASSERT_EQ(array.getBit(1), 0);
 }
 
 TEST(Methods, Set2) {
@@ -103,11 +103,11 @@ TEST(Methods, Set2) {
     int size = 32;
     for (int i = 0; i < size; i++) {
         array.push_back(0);
-        ASSERT_EQ(array[i], 0);
+        ASSERT_EQ(array.getBit(i), 0);
     }
     array.set();
     for (int i = 0; i < array.size(); i++) {
-        ASSERT_EQ(array[i], 1);
+        ASSERT_EQ(array.getBit(i), 1);
     }
 }
 
@@ -115,13 +115,13 @@ TEST(Methods, Reset1) {
     BitArray array;
     for (int i = 0; i < 32; i++) {
         array.push_back(1);
-        ASSERT_EQ(array[i], 1);
+        ASSERT_EQ(array.getBit(i), 1);
     }
     array.reset(0);
-    ASSERT_EQ(array[0], 0);
+    ASSERT_EQ(array.getBit(0), 0);
     array.reset(1);
-    ASSERT_EQ(array[0], 0);
-    ASSERT_EQ(array[1], 0);
+    ASSERT_EQ(array.getBit(0), 0);
+    ASSERT_EQ(array.getBit(1), 0);
 }
 
 TEST(Methods, Reset2) {
@@ -129,11 +129,11 @@ TEST(Methods, Reset2) {
     int size = 32;
     for (int i = 0; i < size; i++) {
         array.push_back(1);
-        ASSERT_EQ(array[i], 1);
+        ASSERT_EQ(array.getBit(i), 1);
     }
     array.reset();
     for (int i = 0; i < array.size(); i++) {
-        ASSERT_EQ(array[i], 0);
+        ASSERT_EQ(array.getBit(i), 0);
     }
 }
 

@@ -12,8 +12,22 @@ private:
     int bitSize;
     int elSize;
 
+
     bool CheckBit(unsigned long value, int pos) const;
     unsigned long SetBit(bool bit, unsigned long value, int pos) const;
+
+    class Wrapper {
+    private:
+        unsigned int index;
+        BitArray *adrArr;
+
+    public:
+        Wrapper(BitArray *BitArray, int ind);
+
+        Wrapper& operator=(bool bit);
+
+    };
+
 public:
     BitArray();
     ~BitArray();
@@ -73,10 +87,13 @@ public:
 
 
     //¬озвращает значение бита по индексу i.
-    bool operator[](int i) const;
+//    bool operator[](int i) const;
+    Wrapper operator[](int i);
 
     int size() const;
     bool empty() const;
+
+    bool getBit(int ind) const;
 
     //¬озвращает строковое представление массива.
     string to_string() const;
