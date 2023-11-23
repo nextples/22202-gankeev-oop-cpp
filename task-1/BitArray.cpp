@@ -81,7 +81,7 @@ BitArray & BitArray::operator=(const BitArray &other) {
     return *this;
 }
 
-void BitArray::resize(int newBitSize, bool value) {   //Изменяет размер массива. В случае расширения, новые элементы инициализируются значением value.
+void BitArray::resize(int newBitSize, bool value) {   //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ value.
     assert(bitSize >= 0 && "resize: size of array is above zero");
     int newElSize;
     if (newBitSize % BITS_IN_LONG == 0) {
@@ -422,4 +422,15 @@ BitArray::Wrapper::Wrapper(BitArray *BitArray, int ind) {
 BitArray::Wrapper& BitArray::Wrapper::operator=(bool bit) {
     this->adrArr->set(bit, index);
     return *this;
+}
+
+BitArray::Wrapper &BitArray::Wrapper::operator=(const BitArray::Wrapper &other) {
+    bool otherBit = other.adrArr->getBit((int)other.index);
+    int pos = other.index;
+    this->adrArr->set(pos, otherBit);
+    return *this;
+}
+
+BitArray::Wrapper::operator bool() const {
+    return this->adrArr->getBit(this->index);
 }
