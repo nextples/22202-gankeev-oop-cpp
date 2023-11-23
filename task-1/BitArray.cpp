@@ -294,12 +294,6 @@ int BitArray::count() const {
     return sum;
 }
 
-//bool BitArray::operator[](int i) const {
-//    assert(i < this->size() && "operator []: array index out of bounds");
-//    bool bit = CheckBit(array[i / BITS_IN_LONG], BITS_IN_LONG - (i % BITS_IN_LONG) - 1);
-//    return bit;
-//}
-
 int BitArray::size() const {
     return bitSize;
 }
@@ -323,7 +317,7 @@ BitArray::Wrapper BitArray::operator[](int i) {
     return BitArray::Wrapper(this, i);
 }
 
-bool BitArray::getBit(int ind) const{
+bool BitArray::getBit(int ind) const {
     assert(ind < this->size() && "getBit: array index out of bounds");
     bool bit = CheckBit(array[ind / BITS_IN_LONG], BITS_IN_LONG - (ind % BITS_IN_LONG) - 1);
     return bit;

@@ -10,7 +10,7 @@ int main() {
 
     array[1] = 1;
     array[0] = 0;
-    bool bit = array[1];
+    int bit = array[1] & array[0];
     cout << array.to_string() << endl;
     cout << array[0] << endl;
     cout << bit << endl;
