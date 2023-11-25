@@ -134,26 +134,26 @@ void BitArray::push_back(bool bit) {
     }
 }
 
-BitArray &BitArray::operator&=(const BitArray &b) {
-    assert(bitSize == b.bitSize && "operator &=: incorrect size of arrays");
+BitArray &BitArray::operator&=(const BitArray &other) {
+    assert(bitSize == other.bitSize && "operator &=: incorrect size of arrays");
     for (int i = 0; i < elSize; i++) {
-        array[i] = array[i] & b.array[i];
+        array[i] = array[i] & other.array[i];
     }
     return (BitArray &) *this;
 }
 
-BitArray &BitArray::operator|=(const BitArray &b) {
-    assert(bitSize == b.bitSize && "operator |=: incorrect size of arrays");
+BitArray &BitArray::operator|=(const BitArray &other) {
+    assert(bitSize == other.bitSize && "operator |=: incorrect size of arrays");
     for (int i = 0; i < elSize; i++) {
-        array[i] = array[i] | b.array[i];
+        array[i] = array[i] | other.array[i];
     }
     return (BitArray &) *this;
 }
 
-BitArray &BitArray::operator^=(const BitArray &b) {
-    assert(bitSize == b.bitSize && "operator ^=: incorrect size of arrays");
+BitArray &BitArray::operator^=(const BitArray &other) {
+    assert(bitSize == other.bitSize && "operator ^=: incorrect size of arrays");
     for (int i = 0; i < elSize; i++) {
-        array[i] = array[i] ^ b.array[i];
+        array[i] = array[i] ^ other.array[i];
     }
     return (BitArray &) *this;
 }
@@ -230,9 +230,9 @@ BitArray BitArray::operator>>(int shift) const {
     return newArray;
 }
 
-BitArray &BitArray::set(int pos, bool bit) {
-    assert(pos < bitSize && "set: array index out of bounds");
-    array[pos / BITS_IN_LONG] = SetBit(bit, array[pos / BITS_IN_LONG], BITS_IN_LONG - (pos % BITS_IN_LONG) - 1);
+BitArray &BitArray::set(int ind, bool bit) {
+    assert(ind < bitSize && "set: array index out of bounds");
+    array[ind / BITS_IN_LONG] = SetBit(bit, array[ind / BITS_IN_LONG], BITS_IN_LONG - (ind % BITS_IN_LONG) - 1);
     return *this;
 }
 
@@ -243,9 +243,9 @@ BitArray &BitArray::set() {
     return *this;
 }
 
-BitArray &BitArray::reset(int pos) {
-    assert(pos < bitSize && "reset: array index out of bounds");
-    array[pos / BITS_IN_LONG] = SetBit(false, array[pos / BITS_IN_LONG], BITS_IN_LONG - (pos % BITS_IN_LONG) - 1);
+BitArray &BitArray::reset(int ind) {
+    assert(ind < bitSize && "reset: array index out of bounds");
+    array[ind / BITS_IN_LONG] = SetBit(false, array[ind / BITS_IN_LONG], BITS_IN_LONG - (ind % BITS_IN_LONG) - 1);
     return *this;
 }
 
@@ -306,15 +306,15 @@ bool BitArray::empty() const {
 }
 
 
-void BitArray::swap(BitArray &b) {
-    BitArray tmp(b);
-    b = *this;
+void BitArray::swap(BitArray &other) {
+    BitArray tmp(other);
+    other = *this;
     *this = tmp;
 }
 
-BitArray::Wrapper BitArray::operator[](int i) {
-    assert(i < this->size() && "operator[]: array index out of bounds");
-    return BitArray::Wrapper(this, i);
+BitArray::Wrapper BitArray::operator[](int ind) {
+    assert(ind < this->size() && "operator[]: array index out of bounds");
+    return BitArray::Wrapper(this, ind);
 }
 
 bool BitArray::getBit(int ind) const {
@@ -409,22 +409,22 @@ BitArray operator^(const BitArray& a, const BitArray& b) {
 }
 
 BitArray::Wrapper::Wrapper(BitArray *BitArray, int ind) {
-    this->adrArr = BitArray;
+    this->wrapArray = BitArray;
     this->index = ind;
 }
 
 BitArray::Wrapper& BitArray::Wrapper::operator=(bool bit) {
-    this->adrArr->set(bit, index);
+    this->wrapArray->set(bit, index);
     return *this;
 }
 
 BitArray::Wrapper &BitArray::Wrapper::operator=(const BitArray::Wrapper &other) {
-    bool otherBit = other.adrArr->getBit((int)other.index);
+    bool otherBit = other.wrapArray->getBit((int)other.index);
     int pos = other.index;
-    this->adrArr->set(pos, otherBit);
+    this->wrapArray->set(pos, otherBit);
     return *this;
 }
 
 BitArray::Wrapper::operator bool() const {
-    return this->adrArr->getBit(this->index);
+    return this->wrapArray->getBit(this->index);
 }
